@@ -33,14 +33,77 @@ func filter(slice []int, f testInt) []int {
 	return result
 }
 
+//声明一个新的类型
+type person struct {
+	name string
+	age  int
+}
+
+//比较两个人的年龄, 返回年龄大的那个人, 并且返回年龄差
+//struct也是传值的
+func Older(p1, p2 person) (person, int) {
+	if p1.age > p2.age { //比较p1和p2这两个人的年龄
+		return p1, p1.age - p2.age
+	}
+	return p2, p2.age - p1.age
+}
+
+type Human struct {
+	name   string
+	age    int
+	weight int
+}
+
+type Student struct {
+	Human      //匿名字段, name默认student就包含了Human的所有字段
+	speciality string
+}
+
 func main() {
 
-	slice := []int{1, 2, 3, 4, 5, 7}
-	fmt.Println("slice = ", slice)
-	odd := filter(slice, isOdd) //函数当做值来传递
-	fmt.Println("Odd elements of slice are: ", odd)
-	even := filter(slice, isEven) //函数当做值来传递
-	fmt.Println("Even elements of slice are: ", even)
+	//mark := Student{Human{"Mark", 25, 120}, "Computer Science"}
+	//
+	//fmt.Println("His name is ", mark.name)
+	//fmt.Println("His age is ", mark.age)
+	//fmt.Println("His weight is ", mark.weight)
+	//fmt.Println("His speciality is ", mark.speciality)
+	//
+	//mark.speciality = "AI"
+	//fmt.Println("Mark changed his speciality")
+	//fmt.Println("His speciality is ", mark.speciality)
+	//
+	//fmt.Println("Mark become old")
+	//mark.age = 46
+	//fmt.Println("His age is", mark.age)
+	//
+	//fmt.Println("Mark is not an athlet anymore")
+	//
+	//mark.weight += 60
+	//fmt.Println("His weight is", mark.weight)
+
+	//var tom person
+	////赋值初始化
+	//tom.name, tom.age = "Tom", 18
+	////两个字段都写清楚的初始化
+	//bob := person{age: 25, name:"Bob"}
+	////按照struct定义顺序初始化
+	//paul := person{"Paul", 43}
+	//
+	//tb_Older, tb_diff := Older(tom, bob)
+	//tp_Older, tp_diff := Older(tom, paul)
+	//bp_Older, bp_diff := Older(bob, paul)
+	//
+	//fmt.Printf("Of %s and %s, %s is older by %d years\n", tom.name, bob.name, tb_Older.name, tb_diff)
+	//fmt.Printf("Of %s and %s, %s is older by %d years\n", tom.name, paul.name, tp_Older.name, tp_diff)
+	//fmt.Printf("Of %s and %s, %s is older by %d years\n", bob.name, paul.name, bp_Older.name, bp_diff)
+	//
+
+	//slice := []int{1, 2, 3, 4, 5, 7}
+	//fmt.Println("slice = ", slice)
+	//odd := filter(slice, isOdd) //函数当做值来传递
+	//fmt.Println("Odd elements of slice are: ", odd)
+	//even := filter(slice, isEven) //函数当做值来传递
+	//fmt.Println("Even elements of slice are: ", even)
 	//var rating = map[string]float32{}
 	//fmt.Println(rating)
 	//var m = make(map[string]string)
