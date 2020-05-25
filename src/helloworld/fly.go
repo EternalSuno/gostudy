@@ -5,23 +5,75 @@ package main
 //import "math"
 import (
 	"fmt"
-	"math"
-	"math/rand"
 )
 
+type testInt func(int) bool //声明一个函数类型
+
+func isOdd(integer int) bool {
+	if integer%2 == 0 {
+		return false
+	}
+	return true
+}
+
+func isEven(integer int) bool {
+	if integer%2 == 0 {
+		return true
+	}
+	return false
+}
+
+func filter(slice []int, f testInt) []int {
+	var result []int
+	for _, value := range slice {
+		if f(value) {
+			result = append(result, value)
+		}
+	}
+	return result
+}
+
 func main() {
-	var rating = map[string]float32{}
-	fmt.Println(rating)
-	var m = make(map[string]string)
-	fmt.Println(m)
-	fmt.Println("My favorite number is", rand.Intn(10))
-	fmt.Print("Hello World")
-	fmt.Println(math.Pi)
-	fmt.Println(add(1, 2))
-	fmt.Println(add2(3, 4))
+
+	slice := []int{1, 2, 3, 4, 5, 7}
+	fmt.Println("slice = ", slice)
+	odd := filter(slice, isOdd) //函数当做值来传递
+	fmt.Println("Odd elements of slice are: ", odd)
+	even := filter(slice, isEven) //函数当做值来传递
+	fmt.Println("Even elements of slice are: ", even)
+	//var rating = map[string]float32{}
+	//fmt.Println(rating)
+	//var m = make(map[string]string)
+	//fmt.Println(m)
+	//fmt.Println("My favorite number is", rand.Intn(10))
+	//fmt.Print("Hello World")
+	//fmt.Println(math.Pi)
+	//fmt.Println(add(1, 2))
+	//fmt.Println(add2(3, 4))
 	//a, b := swap("Hello", "World")
 	//fmt.Println(a, b)
-	fmt.Println(split(16))
+	//fmt.Println(split(16))
+}
+
+func add3(a *int) int {
+	*a = *a + 1
+	return *a
+}
+
+func add1(a int) int {
+	a = a + 1
+	return a
+}
+
+func SumAndProduct(A, B int) (int, int) {
+	return A + B, A * B
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
 
 func add(x int, y int) int {
