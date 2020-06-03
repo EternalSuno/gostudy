@@ -1,6 +1,8 @@
 package day2
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func init() {
 	// struct
@@ -114,6 +116,109 @@ func init() {
 	//	fmt.Println("Mark is not an athlet anymore")
 	//	mark.weight += 60
 	//	fmt.Println("His weight is", mark.weight)
+	//
+	//	mark.Human = Human{"Marcus", 55, 220}
+	//	mark.Human.age -= 1
+	//
 	//}
+
+	//通过匿名访问和修改字段相当的有用，但是不仅仅是struct字段哦，
+	//所有的内置类型和自定义类型都是可以作为匿名字段的。
+	//example:
+	//package main
+	//
+	//import "fmt"
+	//
+	//type Skills []string
+	//
+	//type Human struct {
+	//    name   string
+	//    age    int
+	//    weight int
+	//}
+	//
+	//type Student struct {
+	//    Human  // 匿名字段，struct
+	//    Skills // 匿名字段，自定义的类型string slice
+	//    int    // 内置类型作为匿名字段
+	//    speciality string
+	//}
+	//
+	//func main() {
+	//    // 初始化学生Jane
+	//    jane := Student{ Human : Human{"Jane", 35, 100}, speciality : "Biology"}
+	//    // 现在我们来访问相应的字段
+	//    fmt.Println("Her name is ", jane.name)
+	//    fmt.Println("Her age is ", jane.age)
+	//    fmt.Println("Her weight is ", jane.weight)
+	//    fmt.Println("Her speciality is ", jane.speciality)
+	//    // 我们来修改他的skill技能字段
+	//    jane.Skills = []string{"anatomy"}
+	//    fmt.Println("Her skills are ", jane.Skills)
+	//    fmt.Println("She acquired two new ones ")
+	//    jane.Skills = append(jane.Skills, "physics", "golang")
+	//    fmt.Println("Her skills now are ", jane.Skills)
+	//    // 修改匿名内置类型字段
+	//    jane.int = 3
+	//    fmt.Println("Her preferred number is", jane.int)
+	//}
+	// output:
+	//Her name is  Jane
+	//Her age is  35
+	//Her weight is  100
+	//Her speciality is  Biology
+	//Her skills are  [anatomy]
+	//She acquired two new ones
+	//Her skills now are  [anatomy physics golang]
+	//Her preferred number is 3
+	//struct不仅仅能够将struct作为匿名字段、自定义类型、内置类型都可以作为匿名字段，
+	//而且可以在相应的字段上面进行函数操作（如例子中的append）。
+
+	//这里有一个问题：如果human里面有一个字段叫做phone，而student也有一个字段叫做phone，那么该怎么办呢？
+	//
+	//Go里面很简单的解决了这个问题，最外层的优先访问，也就是当你通过student.phone访问的时候，
+	//是访问student里面的字段，而不是human里面的字段。
+	//
+	//这样就允许我们去重载通过匿名字段继承的一些字段，
+	//当然如果我们想访问重载后对应匿名类型里面的字段， 可以通过匿名字段名来访问。
+	//package main
+	//import "fmt"
+	//
+	//type Human struct {
+	//    name  string
+	//    age   int
+	//    phone string  // Human类型拥有的字段
+	//}
+	//
+	//type Employee struct {
+	//    Human              // 匿名字段Human
+	//    speciality string
+	//    phone      string  // 雇员的phone字段
+	//}
+	//
+	//func main() {
+	//Bob := Employee{Human{"Bob", 34, 75,"777-444-XXXX"}, "Designer", "333-222"}
+	//fmt.Println("Bob's work phone is:", Bob.phone)
+	////Bob's work phone is: 333-222
+	////如果我们要访问Human的phone字段
+	//fmt.Println("Bob's personal phone is:", Bob.Human.phone)
+	//Bob's personal phone is: 777-444-XXXX
+	//}
+
+	//匿名结构体
+	//上面用到的结构体都是先定义后使用的。但是，还可以直接定义并使用结构体，在某些时候还是比较有用的。
+	//方法一
+	//var user struct{Username, Password string}
+	//user.Username = "jack"
+	//user.Password = "admin"
+
+	//方法二
+	//user := struct{Username, Password string}{"test1", "test2"}
+	//user := &struct{Username, Password string}{"test1", "test2"}
+
+	//方法三
+	//user := new(struct{Username, Password string})
+	//user.Username = "test1"
+	//user.Password = "test2"
 
 }

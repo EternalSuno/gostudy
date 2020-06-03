@@ -48,18 +48,45 @@ func Older(p1, p2 person) (person, int) {
 	return p2, p2.age - p1.age
 }
 
+//type Human struct {
+//	name   string
+//	age    int
+//	weight int
+//}
+//
+//type Student struct {
+//	Human      //匿名字段, name默认student就包含了Human的所有字段
+//	speciality string
+//}
+
+type Skills []string
+
 type Human struct {
 	name   string
 	age    int
 	weight int
+	phone  string
 }
 
 type Student struct {
-	Human      //匿名字段, name默认student就包含了Human的所有字段
+	Human      //匿名字段, struct
+	Skills     //匿名字段, 自定义的类型string slice
+	int        //内置类型作为匿名字段
 	speciality string
 }
 
+type Employee struct {
+	Human      //匿名字段Human
+	speciality string
+	phone      string //雇员的phone字段
+}
+
 func main() {
+	user := new(struct{ Username, Password string })
+	user.Username = "test1"
+	user.Password = "test2"
+	fmt.Println(user.Username)
+	fmt.Println(user.Password)
 
 	//mark := Student{Human{"Mark", 25, 120}, "Computer Science"}
 	//
