@@ -5,6 +5,7 @@ package main
 //import "math"
 import (
 	"fmt"
+	"math"
 )
 
 type testInt func(int) bool //声明一个函数类型
@@ -48,17 +49,6 @@ func Older(p1, p2 person) (person, int) {
 	return p2, p2.age - p1.age
 }
 
-//type Human struct {
-//	name   string
-//	age    int
-//	weight int
-//}
-//
-//type Student struct {
-//	Human      //匿名字段, name默认student就包含了Human的所有字段
-//	speciality string
-//}
-
 type Skills []string
 
 type Human struct {
@@ -81,12 +71,81 @@ type Employee struct {
 	phone      string //雇员的phone字段
 }
 
+type Rectangle struct {
+	width, height float64
+}
+
+type Circle struct {
+	radius float64
+}
+
+func (r Rectangle) area() float64 {
+	return r.width * r.height
+}
+
+func (c Circle) area() float64 {
+	return c.radius * c.radius * math.Pi
+}
+
+func area(r Rectangle) float64 {
+	return r.width * r.height
+}
+
+const (
+	WHITE  = iota //0
+	BLACK         //1
+	BLUE          //2
+	RED           //3
+	YELLOW        //4
+)
+
+type Color byte
+
+type Box struct {
+	width, height, depth float64
+	color                Color
+}
+
+type BoxList []Box // a slice of boxes
+
+func (b Box) Volume() float64 {
+	return b.width * b.height * b.depth
+}
+
+func (b *Box) SetColor(c Color) {
+	b.color = c
+}
+
+func (bl BoxList) BiggestColor() Color {
+	v := 0.00
+	k := Color(WHITE)
+	for _, b := range bl {
+		if bv := b.Volume(); bv > v {
+			v = bv
+			k = b.color
+		}
+	}
+	return k
+}
+
+func (bl BoxList) PaintItBlack() {
+	for i, _ := range bl {
+		bl[i].SetColor(BLACK)
+	}
+}
+
+func (c Color) String() string {
+	strings := []string{"WHITE", "BLACK", "BLUE", "RED", "YELLOW"}
+	return strings[c]
+}
+
 func main() {
-	user := new(struct{ Username, Password string })
-	user.Username = "test1"
-	user.Password = "test2"
-	fmt.Println(user.Username)
-	fmt.Println(user.Password)
+
+	//user := new(struct{ Username, Password string })
+	//user.Username = "test1"
+	//user.Password = "test2"
+	//fmt.Println(user.Username)
+	//fmt.Println(user.Password)
 
 	//mark := Student{Human{"Mark", 25, 120}, "Computer Science"}
 	//
