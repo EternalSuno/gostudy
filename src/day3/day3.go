@@ -203,4 +203,21 @@ func learn() {
 	//PaintItBlack()把BoxList里面所有Box的颜色全部变成黑色
 	//String()定义在Color上面，返回Color的具体颜色(字符串格式)
 
+	//指针作为 receiver
+
+	//现在让我们回过头来看看 SetColor 这个 method，它的 receiver 是一个指向 Box 的指针，是的，
+	//你可以使用 *Box。想想为啥要使用指针而不是 Box 本身呢？
+	//我们定义 SetColor 的真正目的是想改变这个 Box 的颜色，如果不传 Box 的指针，
+	//那么 SetColor 接受的其实是 Box 的一个 copy，也就是说 method 内对于颜色值的修改，
+	//其实只作用于 Box 的 copy，而不是真正的 Box。所以我们需要传入指针。
+	//这里可以把 receiver 当作 method 的第一个参数来看，然后结合前面函数讲解的传值和传引用就不难理解
+	//这里你也许会问了那 SetColor 函数里面应该这样定义 *b.Color=c, 而不是 b.Color=c, 因为我们需要读取到指针相应的值。
+	//其实 Go 里面这两种方式都是正确的，当你用指针去访问相应的字段时 (虽然指针没有任何的字段)，Go 知道你要通过指针去获取这个值
+
+	//如果一个 method 的 receiver 是 *T, 你可以在一个 T 类型的实例变量 V 上面调用这个 method，而不需要 &V 去调用这个 method
+	//如果一个 method 的 receiver 是 T，你可以在一个 T 类型的变量 P 上面调用这个 method，而不需要 P 去调用这个 method
+
+	//method 继承
+	//如果匿名字段实现了一个 method，那么包含这个匿名字段的 struct 也能调用该 method。
+
 }

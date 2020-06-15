@@ -51,25 +51,25 @@ func Older(p1, p2 person) (person, int) {
 
 type Skills []string
 
-type Human struct {
-	name   string
-	age    int
-	weight int
-	phone  string
-}
-
-type Student struct {
-	Human      //匿名字段, struct
-	Skills     //匿名字段, 自定义的类型string slice
-	int        //内置类型作为匿名字段
-	speciality string
-}
-
-type Employee struct {
-	Human      //匿名字段Human
-	speciality string
-	phone      string //雇员的phone字段
-}
+//type Human struct {
+//	name   string
+//	age    int
+//	weight int
+//	phone  string
+//}
+//
+//type Student struct {
+//	Human      //匿名字段, struct
+//	Skills     //匿名字段, 自定义的类型string slice
+//	int        //内置类型作为匿名字段
+//	speciality string
+//}
+//
+//type Employee struct {
+//	Human      //匿名字段Human
+//	speciality string
+//	phone      string //雇员的phone字段
+//}
 
 type Rectangle struct {
 	width, height float64
@@ -139,7 +139,39 @@ func (c Color) String() string {
 	return strings[c]
 }
 
+type Human struct {
+	name  string
+	age   int
+	phone string
+}
+
+type Student struct {
+	Human  //匿名字段
+	school string
+}
+
+type Employee struct {
+	Human   //匿名字段
+	company string
+}
+
+// 在Human 上面定义了一个method
+func (h *Human) sayHi() {
+	fmt.Printf("Hi, I am %s you can call me on %s\n", h.name, h.phone)
+}
+
+//Employee 的method 重写 Human 的method
+func (e *Employee) sayHi() {
+	fmt.Printf("Hi, I am %s, I work at %s. Call me on %s\n", e.name, e.company, e.phone)
+}
+
 func main() {
+
+	mark := Student{Human{"Mark", 25, "222-222-YYYY"}, "MIT"}
+	sam := Employee{Human{"Sam", 45, "111-888-XXXX"}, "Golang Inc"}
+
+	mark.sayHi()
+	sam.sayHi()
 
 	//user := new(struct{ Username, Password string })
 	//user.Username = "test1"
