@@ -203,8 +203,23 @@ func sum(a []int, c chan int) {
 	}
 	c <- total //send total to c
 }
+func fibonacci(n int, c chan int) {
+	x, y := 1, 1
+	for i := 0; i < n; i++ {
+		c <- x
+		x, y = y, x+y
+	}
+	close(c)
+}
 
 func main() {
+
+	c := make(chan int, 10)
+	go fibonacci(cap(c), c)
+	for i := range c {
+		fmt.Println(i)
+	}
+	//输出 1	1 2	3 5 8 13 21 34 55
 
 	//ch:= make (chan bool, 4)，创建了可以存储 4 个元素的 bool 型 channel。
 	//在这个 channel 中，前 4 个元素可以无阻塞的写入。

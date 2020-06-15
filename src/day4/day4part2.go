@@ -130,5 +130,41 @@ func concurrent() {
 	// fatal error: all goroutines are asleep - deadlock!
 
 	//Range 和 Close
+	//上面这个例子中，我们需要读取两次 c，这样不是很方便，Go 考虑到了这一点，
+	//所以也可以通过 range，像操作 slice 或者 map 一样操作缓存类型的 channel，请看下面的例子
+	//package main
+	//
+	//import (
+	//	"fmt"
+	//)
+	//
+	//func fibonacci(n int, c chan int) {
+	//	x, y := 1, 1
+	//	for i := 0; i < n; i++ {
+	//		c <- x
+	//		x, y = y, x + y
+	//	}
+	//	close(c)
+	//}
+	//
+	//func main() {
+	//	c := make(chan int, 10)
+	//	go fibonacci(cap(c), c)
+	//	for i := range c {
+	//		fmt.Println(i)
+	//	}
+	//}
+	//输出 1	1 2	3 5 8 13 21 34 55
+
+	//for i := range c 能够不断的读取 channel 里面的数据，直到该 channel 被显式的关闭。
+	//上面代码我们看到可以显式的关闭 channel，生产者通过内置函数 close 关闭 channel。
+	//关闭 channel 之后就无法再发送任何数据了，在消费方可以通过语法 v, ok := <-ch 测试 channel 是否被关闭.
+	//如果 ok 返回 false，那么说明 channel 已经没有任何数据并且已经被关闭。
+	//记住应该在生产者的地方关闭 channel，而不是消费的地方去关闭它，这样容易引起 panic
+	//
+	//另外记住一点的就是 channel 不像文件之类的，不需要经常去关闭，
+	//只有当你确实没有任何发送数据了，或者你想显式的结束 range 循环之类的
+	//
+	//Select
 
 }
