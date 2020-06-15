@@ -6,6 +6,8 @@ package main
 import (
 	"fmt"
 	"math"
+	"runtime"
+	"strconv"
 )
 
 type testInt func(int) bool //声明一个函数类型
@@ -139,39 +141,150 @@ func (c Color) String() string {
 	return strings[c]
 }
 
+//type Human struct {
+//	name  string
+//	age   int
+//	phone string
+//}
+//
+//type Student struct {
+//	Human  //匿名字段
+//	school string
+//}
+//
+//type Employee struct {
+//	Human   //匿名字段
+//	company string
+//}
+//
+//// 在Human 上面定义了一个method
+//func (h *Human) sayHi() {
+//	fmt.Printf("Hi, I am %s you can call me on %s\n", h.name, h.phone)
+//}
+//
+////Employee 的method 重写 Human 的method
+//func (e *Employee) sayHi() {
+//	fmt.Printf("Hi, I am %s, I work at %s. Call me on %s\n", e.name, e.company, e.phone)
+//}
+
 type Human struct {
 	name  string
 	age   int
 	phone string
 }
 
-type Student struct {
-	Human  //匿名字段
-	school string
+func (h Human) String() string {
+	return "<" + h.name + "-" + strconv.Itoa(h.age) + "years - phone:" + h.phone + ">"
 }
 
-type Employee struct {
-	Human   //匿名字段
-	company string
+type Element interface{}
+type List []Element
+type Person struct {
+	name string
+	age  int
 }
 
-// 在Human 上面定义了一个method
-func (h *Human) sayHi() {
-	fmt.Printf("Hi, I am %s you can call me on %s\n", h.name, h.phone)
+//定义了 String 方法,实现了 fmt.Stringer
+func (p Person) String() string {
+	return "(name: " + p.name + " - age: " + strconv.Itoa(p.age) + " years)"
 }
 
-//Employee 的method 重写 Human 的method
-func (e *Employee) sayHi() {
-	fmt.Printf("Hi, I am %s, I work at %s. Call me on %s\n", e.name, e.company, e.phone)
+func say(s string) {
+	for i := 0; i < 5; i++ {
+		runtime.Gosched()
+		fmt.Println(s)
+	}
+}
+
+func sum(a []int, c chan int) {
+	total := 0
+	for _, v := range a {
+		total += v
+	}
+	c <- total //send total to c
 }
 
 func main() {
 
-	mark := Student{Human{"Mark", 25, "222-222-YYYY"}, "MIT"}
-	sam := Employee{Human{"Sam", 45, "111-888-XXXX"}, "Golang Inc"}
+	//ch:= make (chan bool, 4)，创建了可以存储 4 个元素的 bool 型 channel。
+	//在这个 channel 中，前 4 个元素可以无阻塞的写入。
+	//当写入第 5 个元素时，代码将会阻塞，直到其他 goroutine 从 channel 中读取一些元素，腾出空间。
+	//ch := make(chan type, value)
+	//当 value = 0 时，channel 是无缓冲阻塞读写的，
+	//当 value > 0 时，channel 有缓冲、是非阻塞的，直到写满 value 个元素才阻塞写入。
+	//c := make(chan int, 1) //// 修改 2 为 1 就报错，修改 2 为 3 可以正常运行
+	//c <- 1
+	//c <- 2
+	//fmt.Println(<-c)
+	//fmt.Println(<-c)
+	// 修改为 1 报如下的错误:
+	// fatal error: all goroutines are asleep - deadlock!
 
-	mark.sayHi()
-	sam.sayHi()
+	//a := []int{7, 2, 8, -9, 4, 0}
+	//c := make(chan int)
+	//go sum(a[:len(a)/2], c)
+	//go sum(a[len(a)/2:], c)
+	//x, y := <-c, <-c  //receive from c
+	//
+	//fmt.Println(x, y, x+y)
+	//-5 17 12
+	//默认情况下，channel 接收和发送数据都是阻塞的，除非另一端已经准备好，
+	//这样就使得 Goroutines 同步变的更加的简单，而不需要显式的 lock。所谓阻塞，
+	//也就是如果读取（value := <-ch）它将会被阻塞，直到有数据接收。
+	//其次，任何发送（ch<-5）将会被阻塞，直到数据被读出。
+	//无缓冲 channel 是在多个 goroutine 之间同步很棒的工具。
+
+	//go say("world") // 开了一个新的Goroutines 执行
+	//say("hello") // 当前 Goroutines 执行
+
+	//list := make(List, 3)
+	//list[0] = 1 // an int
+	//list[1] = "Hello"
+	//list[2] = Person{"Dennis", 70}
+
+	//for index, element := range list {
+	//	if value, ok := element.(int); ok {
+	//		fmt.Printf("list[%d] is an int and its value is %d\n", index, value)
+	//	} else if value, ok := element.(string); ok {
+	//		fmt.Printf("list[%d] is a string and its value is %s\n", index, value)
+	//	} else if value, ok := element.(Person); ok {
+	//		fmt.Printf("list[%d] is a Person and its value is %s\n", index, value)
+	//	} else {
+	//		fmt.Printf("list[%d] is of a different type \n", index)
+	//	}
+	//}
+
+	//for index, element := range list {
+	//	switch value := element.(type) {
+	//	case int:
+	//		fmt.Printf("list[%d] is an int and its value is %d\n", index, value)
+	//	case string:
+	//		fmt.Printf("list[%d] is a string and its value is %s\n", index, value)
+	//	case Person:
+	//		fmt.Printf("list[%d] is a Person and its value is %s\n", index, value)
+	//	default:
+	//		fmt.Printf("list[%d] is of a different type \n", index)
+	//	}
+	//}
+
+	//Bob := Human{"Bob", 39, "000-7777-xxx"}
+	//fmt.Println("This Human is : ", Bob)
+	//空interfce
+	//定义为a为空接口
+	//var a interface{}
+	//var i int = 5
+	//s := "Hello world"
+	////a 可以储存任意类型的数值
+	//a = i
+	//fmt.Println(a)
+	//a = s
+	//fmt.Println(a)
+
+	//mark := Student{Human{"Mark", 25, "222-222-YYYY"}, "MIT"}
+	//sam := Employee{Human{"Sam", 45, "111-888-XXXX"}, "Golang Inc"}
+	//
+	//mark.sayHi()
+	//sam.sayHi()
 
 	//user := new(struct{ Username, Password string })
 	//user.Username = "test1"
