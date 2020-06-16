@@ -8,6 +8,7 @@ import (
 	"math"
 	"runtime"
 	"strconv"
+	"time"
 )
 
 type testInt func(int) bool //声明一个函数类型
@@ -214,11 +215,28 @@ func fibonacci(n int, c chan int) {
 
 func main() {
 
-	c := make(chan int, 10)
-	go fibonacci(cap(c), c)
-	for i := range c {
-		fmt.Println(i)
-	}
+	//goroutine超时
+	c := make(chan int)
+	o := make(chan bool)
+	go func() {
+		for {
+			select {
+			case v := <-c:
+				println(v)
+			case <-time.After(5 * time.Second):
+				println("timeout")
+				o <- true
+				break
+			}
+		}
+	}()
+	<-o
+
+	//c := make(chan int, 10)
+	//go fibonacci(cap(c), c)
+	//for i := range c {
+	//	fmt.Println(i)
+	//}
 	//输出 1	1 2	3 5 8 13 21 34 55
 
 	//ch:= make (chan bool, 4)，创建了可以存储 4 个元素的 bool 型 channel。
