@@ -239,6 +239,4 @@ func concurrent() {
 	//GOMAXPROCS
 	//用来设置可以并行计算的 CPU 核数的最大值，并返回之前的值。
 
-	//
-
 }

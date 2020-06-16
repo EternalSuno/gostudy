@@ -6,9 +6,9 @@ package main
 import (
 	"fmt"
 	"math"
+	"net/http"
 	"runtime"
 	"strconv"
-	"time"
 )
 
 type testInt func(int) bool //声明一个函数类型
@@ -213,24 +213,66 @@ func fibonacci(n int, c chan int) {
 	close(c)
 }
 
+//func sayhelloName(w http.ResponseWriter, r *http.Request) {
+//	r.ParseForm() //解析参数, 默认是不会解析
+//	fmt.Println(r.Form) //这些信息是输出到服务器端的打印信息
+//	fmt.Println("path", r.URL.Path)
+//	fmt.Println("scheme", r.URL.Scheme)
+//	fmt.Println(r.Form["url_long"])
+//	for k, v := range r.Form {
+//		fmt.Println("key:", k)
+//		fmt.Println("val:", strings.Join(v, ""))
+//	}
+//	fmt.Fprint(w, "Hello astaxie!") // 这个写入到 w 的是输出到客户端的
+//
+//}
+
+type MyMux struct {
+}
+
+func (p *MyMux) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/" {
+		sayhelloName(w, r)
+		return
+	}
+	http.NotFound(w, r)
+	return
+}
+
+func sayhelloName(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "Hello myroute!")
+}
+
 func main() {
 
+	mux := &MyMux{}
+	http.ListenAndServe(":9090", mux)
+
+	//http.HandleFunc("/", sayhelloName) // 设置访问的路由
+	//err := http.ListenAndServe(":9090", nil) //设置监听的端口
+	//if err != nil {
+	//	log.Fatal("ListenAndServe:", err)
+	//}
+	//nginx、apache 服务器不需要吗？Go 就是不需要这些，因为他直接就监听 tcp 端口了，做了 nginx 做的事情，
+	//然后 sayhelloName 这个其实就是我们写的逻辑函数了，跟 php 里面的控制层（controller）函数类似。
+	//
+
 	//goroutine超时
-	c := make(chan int)
-	o := make(chan bool)
-	go func() {
-		for {
-			select {
-			case v := <-c:
-				println(v)
-			case <-time.After(5 * time.Second):
-				println("timeout")
-				o <- true
-				break
-			}
-		}
-	}()
-	<-o
+	//c := make(chan int)
+	//o := make(chan bool)
+	//go func() {
+	//	for {
+	//		select {
+	//		case v := <-c:
+	//			println(v)
+	//		case <-time.After(5 * time.Second):
+	//			println("timeout")
+	//			o <- true
+	//			break
+	//		}
+	//	}
+	//}()
+	//<-o
 
 	//c := make(chan int, 10)
 	//go fibonacci(cap(c), c)
